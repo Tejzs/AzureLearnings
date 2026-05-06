@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bet-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bet-service
+  template:
+    metadata:
+      labels:
+        app: bet-service
+    spec:
+      containers:
+      - name: bet-service
+        image: bet-service:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 3002
+        env:
+        - name: ODDS_API_URL
+          value: "http://odds-api:3000"
+        - name: WALLET_URL
+          value: "http://wallet-service:3001"
+        - name: SQLITE_PATH
+          value: "/app/data/sportsbook.db"
+        volumeMounts:
+        - name: sqlite-storage
+          mountPath: /app/data
+      volumes:
+      - name: sqlite-storage
+        persistentVolumeClaim:
+          claimName: sqlite-pvc

@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: odds-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: odds-api
+  template:
+    metadata:
+      labels:
+        app: odds-api
+    spec:
+      containers:
+      - name: odds-api
+        image: odds-api:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 3000
+        env:
+        - name: REDIS_URL
+          valueFrom:
+            secretKeyRef:
+              name: redis-secret
+              key: REDIS_URL
