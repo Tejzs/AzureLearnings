@@ -1,7 +1,7 @@
 const express = require("express");
 const axios = require("axios");
 const Database = require("better-sqlite3");
-
+require("./consumer");
 const app = express();
 app.use(express.json());
 
